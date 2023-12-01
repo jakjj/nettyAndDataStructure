@@ -1,11 +1,14 @@
 package dataStructureAndalg.alg.tree.binaryTree;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MyBinaryTree {
 
     BinaryTreeNode root;
 
     public static void main(String[] args) {
-        int[] arr = {12,15};
+        int[] arr = {12,15,2,3,5,4,98,65,52,43,15,28,6,87};
 
         MyBinaryTree myBinaryTree = new MyBinaryTree();
 
@@ -15,11 +18,14 @@ public class MyBinaryTree {
         myBinaryTree.inFixOrder();
         System.out.println("-------------");
         myBinaryTree.remove(12);
-        myBinaryTree.remove(2);
-        myBinaryTree.remove(62);
+        myBinaryTree.remove(15);
         myBinaryTree.inFixOrder();
     }
 
+    /**
+     * 新增节点
+     * @param node
+     */
     public void add(BinaryTreeNode node){
         if(root == null){
             root = node;
@@ -45,6 +51,9 @@ public class MyBinaryTree {
         }
     }
 
+    /**
+     * 中序遍历
+     */
     public void inFixOrder(){
         if(root == null){
             return ;
@@ -53,41 +62,30 @@ public class MyBinaryTree {
     }
 
     public void remove(int value){
-
         if(root == null){
             return;
         }
-        BinaryTreeNode parentNode = null;
-        BinaryTreeNode currNode = root;
-        boolean isLeft = true;
-        //查找目标节点和父节点
-        while(true){
-            if(currNode.value == value){
-                break;
-            }
-            if(currNode.value > value){
-                if(currNode.left == null){
-                    //异常
-                    return;
-                }else{
-                    if(currNode.left.value == value){
-                        parentNode = currNode;
-                    }
-                    currNode = currNode.left;
-                }
-            }else {
-                if(currNode.right == null){
-                    //异常
-                    return;
-                }else{
-                    if(currNode.right.value == value){
-                        isLeft = false;
-                        parentNode = currNode;
-                    }
-                    currNode = currNode.right;
-                }
-            }
+        Map<String,BinaryTreeNode> map = new HashMap<>();
+        map.put("parentNode",null);
+        map.put("currNode",root);
+        try {
+            boolean isLeft = processSearchNode(value, map);
+            processDelNode(map,isLeft);
+        } catch (Exception e) {
+
         }
+    }
+
+    /**
+     * 处理删除的节点
+     * @param map
+     * @param isLeft
+     */
+    public void processDelNode(Map<String,BinaryTreeNode> map, boolean isLeft){
+
+        BinaryTreeNode parentNode = map.get("parentNode");
+        BinaryTreeNode currNode = map.get("currNode");
+
         if(parentNode == null){
             //目标节点为根节点
             //右子树为空，root等于左子树，为null也无所谓
@@ -136,6 +134,11 @@ public class MyBinaryTree {
         }
     }
 
+    /**
+     * 查询目标树下最小节点
+     * @param subNode
+     * @return
+     */
     public BinaryTreeNode findMin(BinaryTreeNode subNode){
         BinaryTreeNode parentNode = subNode;
         while(true){
@@ -153,30 +156,50 @@ public class MyBinaryTree {
         }
     }
 
-    public BinaryTreeNode search(int value){
+    /**
+     * 查询目标节点和其父节点
+     * @param value
+     * @param map
+     * @return
+     */
+    public boolean processSearchNode(int value, Map<String,BinaryTreeNode> map){
 
-        BinaryTreeNode currNode = root;
-        if(root.value == value){
-            return root;
-        }
+        BinaryTreeNode parentNode = map.get("parentNode");
+        BinaryTreeNode currNode = map.get("currNode");
+
+        boolean isLeft = true;
+        //查找目标节点和父节点
         while(true){
             if(currNode.value == value){
-                return currNode;
+                break;
             }
             if(currNode.value > value){
                 if(currNode.left == null){
-                    return null;
+                    //异常
+                    throw new RuntimeException("无匹配结点");
                 }else{
+                    if(currNode.left.value == value){
+                        parentNode = currNode;
+                        isLeft = true;
+                    }
                     currNode = currNode.left;
                 }
             }else {
                 if(currNode.right == null){
-                    return null;
+                    //异常
+                    throw new RuntimeException("无匹配结点");
                 }else{
+                    if(currNode.right.value == value){
+                        parentNode = currNode;
+                        isLeft = false;
+                    }
                     currNode = currNode.right;
                 }
             }
         }
+        map.put("parentNode",parentNode);
+        map.put("currNode",currNode);
+        return isLeft;
     }
 
 }
