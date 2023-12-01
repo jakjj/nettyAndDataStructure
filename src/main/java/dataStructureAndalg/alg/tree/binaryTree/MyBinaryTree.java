@@ -17,8 +17,7 @@ public class MyBinaryTree {
         }
         myBinaryTree.inFixOrder();
         System.out.println("-------------");
-        myBinaryTree.remove(12);
-        myBinaryTree.remove(15);
+        myBinaryTree.remove(65);
         myBinaryTree.inFixOrder();
     }
 
@@ -103,33 +102,26 @@ public class MyBinaryTree {
             }
         }else{
             //目标节点不是root
+            BinaryTreeNode newSubNode = null;
             //目标节点是叶子结点
             if(currNode.left == null && currNode.right == null){
-                if(isLeft){
-                    parentNode.left = null;
-                }else{
-                    parentNode.right = null;
-                }
-                return;
-            }
-            //目标节点存在一个子节点
-            if(currNode.left == null || currNode.right == null){
-                BinaryTreeNode maybeNode = currNode.left == null ? currNode.right : currNode.left;
-                if(isLeft){
-                    parentNode.left = maybeNode;
-                }else{
-                    parentNode.right = maybeNode;
-                }
-                return;
-            }
-            //目标节点存在双子节点,找右子树最小替换当前节点
-            BinaryTreeNode min = findMin(currNode.right);
-            min.left = currNode.left;
-            min.right = currNode.right;
-            if(isLeft){
-                parentNode.left = min;
+
+            }else if(currNode.left == null || currNode.right == null){
+                //目标节点存在一个子节点
+                newSubNode = currNode.left == null ? currNode.right : currNode.left;
             }else{
-                parentNode.right = min;
+                //目标节点存在双子节点,找右子树最小替换当前节点
+                newSubNode = findMin(currNode.right);
+                newSubNode.left = currNode.left;
+                if(newSubNode != currNode.right){
+                    newSubNode.right = currNode.right;
+                }
+            }
+
+            if(isLeft){
+                parentNode.left = newSubNode;
+            }else{
+                parentNode.right = newSubNode;
             }
         }
     }
