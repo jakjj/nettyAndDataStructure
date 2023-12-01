@@ -1,0 +1,33 @@
+syntax = "proto3";
+//加快解析
+option optimize_for = SPEED;
+//生成到指定包下
+option java_package = "netty.codec.proto";
+//外部类名
+option java_outer_classname = "MyDataInfo";
+
+message MyMessage{
+    enum DataType{
+        //proto3 要求编号从0开始
+        Student = 0;
+        Worker = 1;
+    }
+
+    //定义 data_type 标识 枚举中的类型
+    DataType data_type = 1;
+
+    //标识每个类型只出现最多一次
+    oneof dataBody{
+        Student student = 2;
+        Worker worker = 3;
+    }
+}
+
+message Student{
+    int32 id = 1;
+    string name = 2;
+}
+message Worker{
+    string name= 1;
+    int32 age = 2;
+}

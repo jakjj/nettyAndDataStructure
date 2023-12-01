@@ -1,0 +1,10 @@
+//版本号
+syntax = "proto3";
+//生成外部类名，同时是文件名
+option java_outer_classname = "StudentPOJO";
+//会在StudentPOJO外部类生成一个内部类Student
+message Student{
+    //定义属性 id 类型int32 1是属性序号不是赋值
+    int32 id = 1;
+    string name = 2;
+}
