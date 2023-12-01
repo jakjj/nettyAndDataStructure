@@ -5,7 +5,7 @@ public class MyBinaryTree {
     BinaryTreeNode root;
 
     public static void main(String[] args) {
-        int[] arr = {12,3,5,9,53,24,18,35,65,69,62,45,46,42,87,2};
+        int[] arr = {12,15};
 
         MyBinaryTree myBinaryTree = new MyBinaryTree();
 
@@ -46,11 +46,17 @@ public class MyBinaryTree {
     }
 
     public void inFixOrder(){
+        if(root == null){
+            return ;
+        }
         root.inFixOrder();
     }
 
     public void remove(int value){
 
+        if(root == null){
+            return;
+        }
         BinaryTreeNode parentNode = null;
         BinaryTreeNode currNode = root;
         boolean isLeft = true;
@@ -91,7 +97,10 @@ public class MyBinaryTree {
                 //找右子树中最小的结点替换root
                 BinaryTreeNode min = findMin(currNode.right);
                 min.left = currNode.left;
-                min.right = currNode.right;
+                //判断右子树最小结点是他本身
+                if(min != currNode.right){
+                    min.right = currNode.right;
+                }
                 root = min;
             }
         }else{
