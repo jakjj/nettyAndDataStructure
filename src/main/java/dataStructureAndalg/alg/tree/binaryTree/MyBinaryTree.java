@@ -8,7 +8,9 @@ public class MyBinaryTree {
     BinaryTreeNode root;
 
     public static void main(String[] args) {
-        int[] arr = {12,15,2,3,5,4,98,65,52,43,15,28,6,87};
+//        int[] arr = {12,15,2,3,5,4,98,65,52,43,28,6,87};
+        int[] arr = {12,88,2,99,44,33,48,35,36,37};
+//        int[] arr = {12,15,2,3};
 
         MyBinaryTree myBinaryTree = new MyBinaryTree();
 
@@ -16,9 +18,11 @@ public class MyBinaryTree {
             myBinaryTree.add(new BinaryTreeNode(arr[i]));
         }
         myBinaryTree.inFixOrder();
-        System.out.println("-------------");
-        myBinaryTree.remove(65);
+        System.out.println("height: " + myBinaryTree.getSubHeight(myBinaryTree.root));
+        myBinaryTree.turnTree();
         myBinaryTree.inFixOrder();
+        System.out.println("height: " + myBinaryTree.getSubHeight(myBinaryTree.root));
+        System.out.println("-------------");
     }
 
     /**
@@ -113,6 +117,7 @@ public class MyBinaryTree {
                 //目标节点存在双子节点,找右子树最小替换当前节点
                 newSubNode = findMin(currNode.right);
                 newSubNode.left = currNode.left;
+                //判断不是他自身
                 if(newSubNode != currNode.right){
                     newSubNode.right = currNode.right;
                 }
@@ -194,4 +199,24 @@ public class MyBinaryTree {
         return isLeft;
     }
 
+    public int getHeight(){
+        return getSubHeight(root);
+    }
+
+    private int getSubHeight(BinaryTreeNode node){
+        if(node == null){
+            return 0;
+        }
+        if(node.left == null && node.right== null){
+            return 1;
+        }
+        return node.getHeight();
+    }
+
+    public void turnTree(){
+        if(root == null){
+            return;
+        }
+        root.turnTree();
+    }
 }
