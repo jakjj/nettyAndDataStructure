@@ -19,7 +19,7 @@ public class HttpServer {
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE,true)
-                    .childHandler(new HttpChannelInitializer());
+                    .childHandler(new HttpChannelInitializer(false));
 
             ChannelFuture future = serverBootstrap.bind(6658).sync();
 
